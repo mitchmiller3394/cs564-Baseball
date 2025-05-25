@@ -4,13 +4,13 @@ const ejsMate = require('ejs-mate');
 const methodOverrid = require('method-override');
 //const session = require('express-session');
 //const flash = require('connect-flash');
-//const userRoutes = require('./routes/userRoutes');
+const studentRoutes = require('./routes/studentRoutes');
 //const meRoutes = require('./routes/meRoutes');
 //const passport = require('passport');
 //const LocalStrategy = require('passport-local');
+const mysql = require('mysql2');
 
 // MySQL connection and Pool creation
-const mysql = require('mysql2');
 const pool = mysql.createPool({
     host: 'localhost',
     user: 'root',
@@ -20,7 +20,7 @@ const pool = mysql.createPool({
 
 // Connection and query example
 let queryData = []
-const sql = "SELECT name FROM students WHERE idstudents = 1";
+const sql = "SELECT namestudents FROM students WHERE idstudents = 1";
 pool.getConnection((err, conn) => {
     if (err) {
         console.error('Error getting connection:', err.stack);
@@ -33,8 +33,8 @@ pool.getConnection((err, conn) => {
             return;
         }
         if (result.length > 0) {
-            console.log('ID 1 is:', result[0].name);
-            queryData.push(result[0].name);
+            console.log('ID 1 is:', result[0].namestudents);
+            queryData.push(result[0].namestudents);
         } else {
             console.log('No student found with id 1');
         }
@@ -58,6 +58,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.get('/', (req, res) => {
     res.render('home', { queryData });
 })
+
+app.use('/', studentRoutes);
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
