@@ -5,7 +5,7 @@ const methodOverrid = require('method-override');
 //const session = require('express-session');
 //const flash = require('connect-flash');
 const studentRoutes = require('./routes/studentRoutes');
-//const meRoutes = require('./routes/meRoutes');
+const homeRoutes = require('./routes/homeRoutes');
 //const passport = require('passport');
 //const LocalStrategy = require('passport-local');
 const mysql = require('mysql2');
@@ -16,29 +16,6 @@ const pool = mysql.createPool({
     user: 'root',
     password: 'Mmeyes3394!',
     database: 'cs564',
-});
-
-// Connection and query example
-let queryData = []
-const sql = "SELECT namestudents FROM students WHERE idstudents = 1";
-pool.getConnection((err, conn) => {
-    if (err) {
-        console.error('Error getting connection:', err.stack);
-        return;
-    }
-    conn.query(sql, (err, result) => {
-        conn.release(); // Always release the connection back to the pool
-        if (err) {
-            console.error('Error executing query:', err.stack);
-            return;
-        }
-        if (result.length > 0) {
-            console.log('ID 1 is:', result[0].namestudents);
-            queryData.push(result[0].namestudents);
-        } else {
-            console.log('No student found with id 1');
-        }
-    });
 });
 
 // Express starting and views with ejs
@@ -55,9 +32,7 @@ app.use(methodOverrid('_method'));
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Routes
-app.get('/', (req, res) => {
-    res.render('home', { queryData });
-})
+app.use('/', homeRoutes);
 
 app.use('/', studentRoutes);
 

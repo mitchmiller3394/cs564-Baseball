@@ -1,3 +1,7 @@
 <% layout('layouts/boilerplate') %>
-    <h1 class="text-white">Hello <%= queryData %></h1>
-    
+    <h1 class="text-white">Hello <%= queryData[0].namestudents %></h1>
+    <h2 class="text-white">List of other students:</h2>
+    <ul class="text-white">
+        <% for (let i = 1; i < queryData.length; i++) { %>
+            <li><%= queryData[i].namestudents %></li>
+        <% } %>
