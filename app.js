@@ -19,6 +19,7 @@ const pool = mysql.createPool({
 });
 
 // Connection and query example
+let queryData = []
 const sql = "SELECT name FROM students WHERE idstudents = 1";
 pool.getConnection((err, conn) => {
     if (err) {
@@ -33,6 +34,7 @@ pool.getConnection((err, conn) => {
         }
         if (result.length > 0) {
             console.log('ID 1 is:', result[0].name);
+            queryData.push(result[0].name);
         } else {
             console.log('No student found with id 1');
         }
@@ -54,7 +56,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Routes
 app.get('/', (req, res) => {
-    res.render('home')
+    res.render('home', { queryData });
 })
 
 const port = process.env.PORT || 3000;
