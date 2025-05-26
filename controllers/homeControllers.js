@@ -9,17 +9,16 @@ module.exports.renderHome = async (req, res) => {
         database: 'cs564',
     }).promise();
 
-    let queryData = [];
     const sql = "SELECT namestudents FROM students";
     try {
         const [rows] = await pool.query(sql);
         if (rows.length > 0) {
-            queryData = rows;
             console.log('First student is:', rows[0].namestudents);
+            pool.end(); // Close the pool after use
         } else {
             console.log('No students found');
         }
-        res.render('home', { queryData });
+        res.render('home', { rows });
     } catch (err) {
         console.error('Database error:', err.stack);
         res.status(500).send('Database error');
