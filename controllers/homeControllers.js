@@ -9,14 +9,14 @@ module.exports.renderHome = async (req, res) => {
         database: 'cs564',
     }).promise();
 
-    const sql = "SELECT namestudents FROM students";
+    const sql = "SELECT park_name FROM park";
     try {
         const [rows] = await pool.query(sql);
         if (rows.length > 0) {
-            console.log('First student is:', rows[0].namestudents);
+            console.log('First student is:', rows[0].park_name);
             pool.end(); // Close the pool after use
         } else {
-            console.log('No students found');
+            console.log('No parks found');
         }
         res.render('home', { rows });
     } catch (err) {

@@ -1,7 +1,7 @@
 <% layout('layouts/boilerplate') %>
-    <h1 class="text-white">Hello <%= rows[0].namestudents %></h1>
-    <h2 class="text-white">List of other students:</h2>
+    <h1 class="text-white">Hello "Enter Username here"</h1>
+    <h2 class="text-white">List of ballparks:</h2>
     <ul class="text-white">
-        <% for (let i = 1; i < rows.length; i++) { %>
-            <li><%= rows[i].namestudents %></li>
+        <% for (let i = 0; i < rows.length; i++) { %>
+            <li><%= rows[i].park_name %></li>
         <% } %>
