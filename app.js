@@ -11,7 +11,9 @@ const homeRoutes = require('./routes/homeRoutes');
 const userRoutes = require('./routes/userRoutes');
 const passport = require('passport');
 const LocalStrategy = require('passport-local');
+const argon2 = require('argon2');
 const mysql = require('mysql2');
+const { hash } = require('crypto');
 const MySQLStore = require('express-mysql-session')(session);
 
 // MySQL connection and Pool creation
@@ -60,7 +62,83 @@ app.use(session(sessionConfig));
 app.use(flash());
 
 // Passport
+app.use(passport.initialize());
+app.use(passport.session());
 
+const customFields = {
+    usernameField: 'username',
+    passwordField: 'password',
+};
+
+const verifyCallback = async (username, password, done) => {
+    try {
+        const [rows] = await pool.promise().query('SELECT * FROM users WHERE username = ?', [username]);
+        if (rows.length === 0) {
+            return done(null, false);
+        }
+        user = {idusers: rows[0].idusers, username: rows[0].username, email: rows[0].email, hash: rows[0].hash, isAdmin: rows[0].isAdmin};
+        const isValid = await argon2.verify(user.hash, user.password);
+        if (isValid) {
+            return done(null, user);
+        } else {
+            return done(null, false);
+        }
+    } catch (error) {
+        return done(error);
+    }
+};
+
+passport.use(new LocalStrategy(customFields, verifyCallback));
+passport.serializeUser((user, done) => {
+    done(null, user.idusers);
+});
+passport.deserializeUser(async (id, done) => {
+    try {
+        const [rows] = await pool.promise().query('SELECT * FROM users WHERE idusers = ?', [id]);
+        done(null, rows[0]);
+    } catch (error) {
+        done(error);
+    }
+});
+
+// Passport Middleware
+async function generatePasswordHash(password) {
+    try {
+        const hash = await argon2.hash(password);
+        return hash;
+    } catch (error) {
+        throw new Error('Error generating password hash');
+    }
+}
+
+function isAuth(req, res, next) {
+    if (req.isAuthenticated()) {
+        return next();
+    }
+    req.flash('error', 'You must be logged in to do that!');
+    res.redirect('/login');
+}
+function isAdmin(req, res, next) {
+    if (req.isAuthenticated() && req.user.isAdmin) {
+        return next();
+    }
+    req.flash('error', 'You do not have permission to do that!');
+    res.redirect('/');
+}
+
+async function credsExists(req, res, next) {
+    try {
+        const [rows] = await pool.promise().query('SELECT * FROM users WHERE username = ? OR email = ?', [req.body.username, req.body.email]);
+        if (rows.length > 0) {
+            req.flash('error', 'Username or Email already exists!');
+            return res.redirect('/register');
+        }
+        next();
+    } catch (error) {
+        req.flash('error', 'Database error occurred!');
+        res.redirect('/register');
+    }
+}
 
 // Locals
 app.use((req, res, next) => {
