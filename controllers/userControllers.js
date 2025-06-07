@@ -1,3 +1,5 @@
+const mysql = require('mysql2');
+const generatePasswordHash = require('../utils/passportUtils').generatePasswordHash;
 
 module.exports.renderRegister = (req, res) => {
     res.render('users/register');
@@ -10,20 +12,31 @@ module.exports.renderLogin = (req, res) => {
 module.exports.createUser = async (req, res, next) => {
     try {
         const { username, email, password } = req.body;
-        await user.save();
-        req.login(registeredUser, err => {
-            if (err) return next(err);
-            req.flash('success', 'Registered Successfully');
-            res.redirect('/');
-        })
+        const hash = await generatePasswordHash(password);
+        const pool = mysql.createPool({
+                host: 'localhost',
+                user: 'root',
+                password: process.env.MYSQL_PASSWORD,
+                database: 'cs564',
+            }).promise();
+        
+        const sql = "INSERT INTO users (username, email, hash, isAdmin) VALUES (?, ?, ?, 0)";
+        try {
+            const [rows] = await pool.query(sql, [username, email, hash]);
+            if (rows.affectedRows > 0) {
+                req.flash('success', 'Registration successful!');
+                res.redirect('/login');
+            } else {
+                req.flash('error', 'Registration failed!');
+                res.redirect('/register');
+            }
+        } catch (err) {
+            console.error('Database error:', err.stack);
+            res.status(500).send('Database error');
+        }
     } catch (e) {
-        if (e.code === 11000 && e.keyValue.email) {
-            req.flash('error', 'The email you input is already registered!');
-            res.redirect('/register');
-        } else {
             req.flash('error', e.message);
             res.redirect('/register');
-        }
     }
 }
 
