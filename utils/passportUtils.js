@@ -40,7 +40,8 @@ function credsExists(req, res, next) {
             return res.redirect('/register');
         }
         if (results.length > 0) {
-            req.flash('error', 'Username or Email already exists!');
+            const errorMessage = results[0].username === req.body.username ? 'Username already exists!' : 'Email already exists!';
+            req.flash('error', errorMessage);
             return res.redirect('/register');
         }
         next();

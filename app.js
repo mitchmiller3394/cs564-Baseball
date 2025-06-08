@@ -76,7 +76,7 @@ const verifyCallback = async (username, password, done) => {
             return done(null, false);
         }
         user = {idusers: rows[0].idusers, username: rows[0].username, email: rows[0].email, hash: rows[0].hash, isAdmin: rows[0].isAdmin};
-        const isValid = await argon2.verify(user.hash, user.password);
+        const isValid = await argon2.verify(user.hash, password);
         if (isValid) {
             return done(null, user);
         } else {

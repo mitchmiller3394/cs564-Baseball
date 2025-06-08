@@ -40,14 +40,6 @@ module.exports.createUser = async (req, res, next) => {
     }
 }
 
-module.exports.updateUser = async (req, res) => {
-    const user = req.user;
-    user.profilePic.filename = req.file.filename;
-    user.profilePic.url = req.file.path;
-    await user.save();
-    res.redirect('/')
-}
-
 module.exports.loginUser = (req, res) => {
     const redirectURL = req.session.returnTo || '/';
     delete req.session.returnTo;
