@@ -8,11 +8,12 @@ const mysql = require('mysql2');
         });
 
 module.exports.renderEntry = (req, res) => {
-    res.render('students/entry');
+    res.render('players/entry');
 }
 
-module.exports.createStudent = async (req, res, next) => {
+module.exports.createPlayer = async (req, res, next) => {
     try {
+        //TODO: update this to use the player model if we want to create a player
         const { namestudents } = req.body;
 
         if (!namestudents || typeof namestudents !== 'string' || namestudents.trim() === '') {

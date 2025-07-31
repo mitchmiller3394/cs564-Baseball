@@ -6,7 +6,7 @@ const ejsMate = require('ejs-mate');
 const methodOverrid = require('method-override');
 const session = require('express-session');
 const flash = require('connect-flash');
-const studentRoutes = require('./routes/studentRoutes');
+const playerRoutes = require('./routes/playerRoutes');
 const homeRoutes = require('./routes/homeRoutes');
 const userRoutes = require('./routes/userRoutes');
 const passport = require('passport');
@@ -111,7 +111,7 @@ app.use((req, res, next) => {
 // Routes
 app.use('/', homeRoutes);
 
-app.use('/', studentRoutes);
+app.use('/player', playerRoutes);
 
 app.use('/', userRoutes);
 
