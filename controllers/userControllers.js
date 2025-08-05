@@ -20,9 +20,9 @@ module.exports.createUser = async (req, res, next) => {
                 database: 'cs564',
             }).promise();
         
-        const sql = "INSERT INTO users (username, email, hash, isAdmin) VALUES (?, ?, ?, 0)";
+        const sql = "CALL insertNewUser(?, ?, ?)";
         try {
-            const [rows] = await pool.query(sql, [username, email, hash]);
+            const [rows] = await pool.execute(sql, [username, email, hash]);
             if (rows.affectedRows > 0) {
                 req.flash('success', 'Registration successful!');
                 res.redirect('/login');
