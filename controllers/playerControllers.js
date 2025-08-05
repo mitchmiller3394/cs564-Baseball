@@ -11,6 +11,22 @@ module.exports.renderEntry = (req, res) => {
     res.render('players/entry');
 }
 
+module.exports.searchPlayers = async (q) => {
+    let sql, values;
+    if (q.includes(' ')) {
+        // Split into first and last name
+        const [first, last] = q.split(' ');
+        sql = "SELECT name_first, name_last FROM player WHERE name_first LIKE ? AND name_last LIKE ?";
+        values = [`%${first}%`, `%${last}%`];
+    } else {
+        // Search either field
+        sql = "SELECT name_first, name_last FROM player WHERE name_first LIKE ? OR name_last LIKE ?";
+        values = [`%${q}%`, `%${q}%`];
+    }
+    const [rows] = await pool.promise().query(sql, values);
+    return [rows];
+};
+
 module.exports.createPlayer = async (req, res, next) => {
     try {
         //TODO: update this to use the player model if we want to create a player

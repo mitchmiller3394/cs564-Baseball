@@ -6,8 +6,11 @@
                 <h5 class="card-title text-center">Player Details</h5>
                 <form action="/player" method="POST" class="needs-validation" novalidate>
                     <div class="mb-2">
-                        <label class="form-label mb-1" for="namestudents">Players Name</label>
-                        <input class="form-control" type="text" id="namestudents" name="namestudents" required>
+                         <label class="form-label mb-1" for="playerName">Players Name</label>
+                         <div class="position-relative">
+                            <input class="form-control" type="text" id="playerName" name="playerName" autocomplete="off" required>
+                            <div id="suggestions" class="dropdown-menu w-100" style="max-height: 200px; overflow-y: auto;"></div>
+                         </div>
                     </div>
                     <div class="d-grid">
                         <button class="btn btn-success">Enter</button>
@@ -16,3 +19,38 @@
             </div>
         </div>
     </div>
+<script>
+    let debounceTimeout;
+    document.getElementById('playerName').addEventListener('input', async function() {
+        clearTimeout(debounceTimeout); // Clear previous timeout
+        const query = this.value;
+        const suggestionsDiv = document.getElementById('suggestions');
+        suggestionsDiv.innerHTML = ''; // Clear previous suggestions
+        if (query.length < 2) {
+            suggestionsDiv.classList.remove('show');
+            return; // Only search for queries with 2 or more characters
+        }
+        debounceTimeout = setTimeout(async () => {
+            const res = await fetch(`/player/search?q=${encodeURIComponent(query)}`);
+            const players = await res.json();
+            suggestionsDiv.innerHTML = ''; // Clear previous suggestions
+            if (players.length > 0) {
+                suggestionsDiv.classList.add('dropdown-menu', 'show'); // Show suggestions dropdown
+                players.forEach(player => {
+                    const option = document.createElement('button');
+                    option.type = 'button';
+                    option.className = 'dropdown-item';
+                    option.textContent = player.name_first + ' ' + player.name_last;
+                    option.onclick = () => {
+                        document.getElementById('playerName').value = player.name_first + ' ' + player.name_last;
+                        suggestionsDiv.innerHTML = ''; // Clear suggestions after selection
+                        suggestionsDiv.classList.remove('show'); // Hide suggestions dropdown
+                    };
+                    suggestionsDiv.appendChild(option);
+                });
+            } else {
+                suggestionsDiv.classList.remove('show'); // Hide if no suggestions
+            }
+        }, 300); // Debounce for 300ms
+    });
+</script>
