@@ -6,7 +6,17 @@
             <ul class="list-group list-group-flush">
                 <li class="list-group-item bg-transparent text-white">ID: <%= player.player_id %></li>
                 <li class="list-group-item bg-transparent text-white">Birth Year: <%= player.birth_year %></li>
-                <li class="list-group-item bg-transparent text-white">Debut: <%= player.debut %></li>
+                <li class="list-group-item bg-transparent text-white">Death Year: <%= player.death_year %></li>
+                <li class="list-group-item bg-transparent text-white">Weight: <%= player.weight %> lbs</li>
+                <%
+                    const feet = Math.floor(player.height / 12);
+                    const inches = player.height % 12;
+                %>
+                <li class="list-group-item bg-transparent text-white">
+                    Height: <%= feet %>'<%= inches %>''
+                </li>
+                <li class="list-group-item bg-transparent text-white">Bats: <%= player.bats %></li>
+                <li class="list-group-item bg-transparent text-white">Throws: <%= player.throws %></li>
                 <!-- Add more fields as needed -->
             </ul>
             <a href="/player" class="btn btn-secondary mt-3">Back</a>

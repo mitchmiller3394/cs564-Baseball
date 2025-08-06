@@ -16,9 +16,26 @@ router.route('/search')
 
 router.route('/details')
     .post(catchAsync(async (req, res) => {
-        const { playerId } = req.body;
-        const playerDetails = await players.getPlayerDetails(playerId);
-        res.render('players/details', { player: playerDetails });
+        const { playerId, playerStat } = req.body;
+        if (playerStat === 'Details') {
+            const playerDetails = await players.getPlayerDetails(playerId);
+            res.render('players/details', { player: playerDetails });
+        } else if (playerStat === 'Salary') {
+            // TODO: Handle salary logic here
+            res.send('Salary details not implemented yet');
+        } else if (playerStat === 'Defense') {
+            // TODO: Handle defense logic here
+            res.send('Defense details not implemented yet');
+        } else if (playerStat === 'Offense') {
+            const playerBatting = await players.getPlayerBatting(playerId);
+            res.render('players/batting', { batting: playerBatting });
+        } else if (playerStat === 'Pitching') {
+            // TODO: Handle pitching logic here
+            res.send('Pitching details not implemented yet');
+        } else {
+            req.flash('error', 'Invalid stat selected');
+            res.redirect('/player');
+        }
     }));
 
 module.exports = router;
