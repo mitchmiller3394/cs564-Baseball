@@ -4,13 +4,24 @@
         <div class="card shadow card-bg w-100" style="max-width: 400px;">
             <div class="card-body card-bg">
                 <h5 class="card-title text-center">Player Details</h5>
-                <form action="/player" method="POST" class="needs-validation" novalidate>
+                <form action="/player/details" method="POST" class="needs-validation" novalidate>
                     <div class="mb-2">
                          <label class="form-label mb-1" for="playerName">Players Name</label>
                          <div class="position-relative">
                             <input class="form-control" type="text" id="playerName" name="playerName" autocomplete="off" required>
+                            <input type="hidden" name="playerId" id="playerId">
                             <div id="suggestions" class="dropdown-menu w-100" style="max-height: 200px; overflow-y: auto;"></div>
                          </div>
+                    </div>
+                    <div class="mb-2">
+                        <label class="form-label mb-1" for="playerStat">Stat</label>
+                        <select class="form-select" id="playerStat" name="playerStat" required>
+                            <option value="" disabled selected>Select Stat</option>
+                            <option value="Salary">Salary</option>
+                            <option value="Defense">Defense</option>
+                            <option value="Offense">Offense</option>
+                            <option value="Pitching">Pitching</option>
+                        </select>
                     </div>
                     <div class="d-grid">
                         <button class="btn btn-success">Enter</button>
@@ -43,6 +54,7 @@
                     option.textContent = player.name_first + ' ' + player.name_last;
                     option.onclick = () => {
                         document.getElementById('playerName').value = player.name_first + ' ' + player.name_last;
+                        document.getElementById('playerId').value = player.player_id;
                         suggestionsDiv.innerHTML = ''; // Clear suggestions after selection
                         suggestionsDiv.classList.remove('show'); // Hide suggestions dropdown
                     };

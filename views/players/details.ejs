@@ -1,0 +1,15 @@
+<% layout('layouts/boilerplate') %>
+<div class="container mt-5">
+    <div class="card card-bg shadow">
+        <div class="card-body">
+            <h3 class="card-title"><%= player.name_first %> <%= player.name_last %></h3>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item bg-transparent text-white">ID: <%= player.player_id %></li>
+                <li class="list-group-item bg-transparent text-white">Birth Year: <%= player.birth_year %></li>
+                <li class="list-group-item bg-transparent text-white">Debut: <%= player.debut %></li>
+                <!-- Add more fields as needed -->
+            </ul>
+            <a href="/player" class="btn btn-secondary mt-3">Back</a>
+        </div>
+    </div>
+</div>

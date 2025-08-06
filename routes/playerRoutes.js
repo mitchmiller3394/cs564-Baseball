@@ -14,4 +14,11 @@ router.route('/search')
         res.json(rows);
     }));
 
+router.route('/details')
+    .post(catchAsync(async (req, res) => {
+        const { playerId } = req.body;
+        const playerDetails = await players.getPlayerDetails(playerId);
+        res.render('players/details', { player: playerDetails });
+    }));
+
 module.exports = router;

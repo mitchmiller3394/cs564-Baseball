@@ -16,16 +16,22 @@ module.exports.searchPlayers = async (q) => {
     if (q.includes(' ')) {
         // Split into first and last name
         const [first, last] = q.split(' ');
-        sql = "SELECT name_first, name_last FROM player WHERE name_first LIKE ? AND name_last LIKE ?";
+        sql = "SELECT name_first, name_last, player_id FROM player WHERE name_first LIKE ? AND name_last LIKE ?";
         values = [`%${first}%`, `%${last}%`];
     } else {
         // Search either field
-        sql = "SELECT name_first, name_last FROM player WHERE name_first LIKE ? OR name_last LIKE ?";
+        sql = "SELECT name_first, name_last, player_id FROM player WHERE name_first LIKE ? OR name_last LIKE ?";
         values = [`%${q}%`, `%${q}%`];
     }
     const [rows] = await pool.promise().query(sql, values);
     return [rows];
 };
+
+module.exports.getPlayerDetails = async (id) => {
+    const sql = "SELECT * FROM player WHERE player_id = ?";
+    const [rows] = await pool.promise().query(sql, [id]);
+    return rows[0];
+}
 
 module.exports.createPlayer = async (req, res, next) => {
     try {
