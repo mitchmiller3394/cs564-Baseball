@@ -7,12 +7,15 @@ const methodOverrid = require('method-override');
 const session = require('express-session');
 const flash = require('connect-flash');
 const playerRoutes = require('./routes/playerRoutes');
+const teamRoutes = require('./routes/teamRoutes');
+const randomRoutes = require('./routes/randomRoutes');
 const homeRoutes = require('./routes/homeRoutes');
 const userRoutes = require('./routes/userRoutes');
 const passport = require('passport');
 const LocalStrategy = require('passport-local');
 const argon2 = require('argon2');
 const mysql = require('mysql2');
+const { text } = require('stream/consumers');
 const MySQLStore = require('express-mysql-session')(session);
 
 // MySQL connection and Pool creation
@@ -112,6 +115,10 @@ app.use((req, res, next) => {
 app.use('/', homeRoutes);
 
 app.use('/player', playerRoutes);
+
+app.use('/team', teamRoutes);
+
+app.use('/random', randomRoutes);
 
 app.use('/', userRoutes);
 
