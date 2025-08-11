@@ -1,0 +1,35 @@
+<% layout('layouts/boilerplate') %>
+<div class="container mt-5">
+    <div class="card card-bg shadow">
+        <div class="card-body">
+            <h3 class="card-title mb-4">Salary Information</h3>
+            <% if (salary && salary.length && salary[0].length) { %>
+                <div class="table-responsive">
+                    <table class="table table-dark table-striped table-bordered align-middle">
+                        <thead>
+                            <tr>
+                                <th>Year</th>
+                                <th>Team</th>
+                                <th>Salary</th>
+                                <!-- Add more columns as needed -->
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% salary[0].forEach(row => { %>
+                                <tr>
+                                    <td><%= row.year %></td>
+                                    <td><%= row.team_id %></td>
+                                    <td><%= row.salary %></td>
+                                    <!-- Add more columns as needed -->
+                                </tr>
+                            <% }) %>
+                        </tbody>
+                    </table>
+                </div>
+            <% } else { %>
+                <div class="alert alert-warning">No Salary info available for this player.</div>
+            <% } %>
+            <a href="/player" class="btn btn-secondary mt-3">Back</a>
+        </div>
+    </div>
+</div>

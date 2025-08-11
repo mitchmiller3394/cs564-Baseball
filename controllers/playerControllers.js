@@ -51,6 +51,12 @@ module.exports.getPlayerPitching = async (id) => {
     return [rows];
 }
 
+module.exports.getPlayerSalary = async (id) => {
+    const sql = "SELECT * FROM salary s, cost c WHERE c.player_id = ? AND s.salary_id = c.salary_id";
+    const [rows] = await pool.promise().query(sql, [id]);
+    return [rows];
+}
+
 module.exports.createPlayer = async (req, res, next) => {
     try {
         //TODO: update this to use the player model if we want to create a player

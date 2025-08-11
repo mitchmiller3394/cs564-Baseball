@@ -21,8 +21,8 @@ router.route('/details')
             const playerDetails = await players.getPlayerDetails(playerId);
             res.render('players/details', { player: playerDetails });
         } else if (playerStat === 'Salary') {
-            // TODO: Handle salary logic here
-            res.send('Salary details not implemented yet');
+            const playerSalary = await players.getPlayerSalary(playerId);
+            res.render('players/salary', { salary: playerSalary });
         } else if (playerStat === 'Defense') {
             const playerFielding = await players.getPlayerFielding(playerId);
             res.render('players/fielding', { fielding: playerFielding });
