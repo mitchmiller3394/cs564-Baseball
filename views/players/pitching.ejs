@@ -2,8 +2,8 @@
 <div class="container mt-5">
     <div class="card card-bg shadow">
         <div class="card-body">
-            <h3 class="card-title mb-4">Batting Stats</h3>
-            <% if (batting && batting.length && batting[0].length) { %>
+            <h3 class="card-title mb-4">Pitching Stats</h3>
+            <% if (pitching && pitching.length && pitching[0].length) { %>
                 <div class="table-responsive">
                     <table class="table table-dark table-striped table-bordered align-middle">
                         <thead>
@@ -11,33 +11,41 @@
                                 <th>Year</th>
                                 <th>Team</th>
                                 <th>Games</th>
-                                <th>At Bats</th>
-                                <th>Runs</th>
-                                <th>Hits</th>
-                                <th>Doubles</th>
-                                <th>Triples</th>
+                                <th>Wins</th>
+                                <th>Loses</th>
+                                <th>Games Started</th>
+                                <th>Complete Games</th>
+                                <th>Shutouts</th>
+                                <th>Saves</th>
+                                <th>Innings Pitched</th>
+                                <th>Hits Allowed</th>
+                                <th>Earned Runs</th>
                                 <th>Home Runs</th>
-                                <th>RBIs</th>
-                                <th>Stolen Bases</th>
-                                <th>Caught Stealing</th>
+                                <th>Walks</th>
+                                <th>Strikeouts</th>
+                                <th>Earned Run Average</th>
                                 <!-- Add more columns as needed -->
                             </tr>
                         </thead>
                         <tbody>
-                            <% batting[0][0].forEach(row => { %>
+                            <% pitching[0][0].forEach(row => { %>
                                 <tr>
                                     <td><%= row.year %></td>
                                     <td><%= row.team %></td>
                                     <td><%= row.g %></td>
-                                    <td><%= row.ab %></td>
-                                    <td><%= row.r %></td>
+                                    <td><%= row.w %></td>
+                                    <td><%= row.l %></td>
+                                    <td><%= row.gs %></td>
+                                    <td><%= row.cg %></td>
+                                    <td><%= row.sho %></td>
+                                    <td><%= row.sv %></td>
+                                    <td><%= row.ipouts %></td>
                                     <td><%= row.h %></td>
-                                    <td><%= row.double %></td>
-                                    <td><%= row.triple %></td>
+                                    <td><%= row.er %></td>
                                     <td><%= row.hr %></td>
-                                    <td><%= row.rbi %></td>
-                                    <td><%= row.sb %></td>
-                                    <td><%= row.cs %></td>
+                                    <td><%= row.bb %></td>
+                                    <td><%= row.so %></td>
+                                    <td><%= row.era %></td>
                                     <!-- Add more columns as needed -->
                                 </tr>
                             <% }) %>

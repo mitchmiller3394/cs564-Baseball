@@ -45,6 +45,12 @@ module.exports.getPlayerFielding = async (id) => {
     return [rows];
 }
 
+module.exports.getPlayerPitching = async (id) => {
+    const sql = "CALL searchPlayerPitching(?)";
+    const [rows] = await pool.promise().execute(sql, [id]);
+    return [rows];
+}
+
 module.exports.createPlayer = async (req, res, next) => {
     try {
         //TODO: update this to use the player model if we want to create a player

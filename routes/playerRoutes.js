@@ -30,8 +30,8 @@ router.route('/details')
             const playerBatting = await players.getPlayerBatting(playerId);
             res.render('players/batting', { batting: playerBatting });
         } else if (playerStat === 'Pitching') {
-            // TODO: Handle pitching logic here
-            res.send('Pitching details not implemented yet');
+            const playerPitching = await players.getPlayerPitching(playerId);
+            res.render('players/pitching', { pitching: playerPitching });
         } else {
             req.flash('error', 'Invalid stat selected');
             res.redirect('/player');
