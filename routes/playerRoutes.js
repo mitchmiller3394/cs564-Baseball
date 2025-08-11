@@ -24,8 +24,8 @@ router.route('/details')
             // TODO: Handle salary logic here
             res.send('Salary details not implemented yet');
         } else if (playerStat === 'Defense') {
-            // TODO: Handle defense logic here
-            res.send('Defense details not implemented yet');
+            const playerFielding = await players.getPlayerFielding(playerId);
+            res.render('players/fielding', { fielding: playerFielding });
         } else if (playerStat === 'Offense') {
             const playerBatting = await players.getPlayerBatting(playerId);
             res.render('players/batting', { batting: playerBatting });
