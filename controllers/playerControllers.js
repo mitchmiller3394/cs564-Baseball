@@ -52,7 +52,7 @@ module.exports.getPlayerPitching = async (id) => {
 }
 
 module.exports.getPlayerSalary = async (id) => {
-    const sql = "SELECT * FROM salary s, cost c WHERE c.player_id = ? AND s.salary_id = c.salary_id";
+    const sql = "SELECT * FROM salary s, cost c WHERE c.player_id = ? AND s.salary_id = c.salary_id ORDER BY year";
     const [rows] = await pool.promise().query(sql, [id]);
     return [rows];
 }

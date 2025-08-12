@@ -38,4 +38,27 @@ router.route('/details')
         }
     }));
 
+router.route('/salary/update')
+    //TODO: Fix this. redirect to player details page somehow. maybe with a get to same route?
+    .post(catchAsync(async (req, res) => {
+        const { player_id, year, team_id, salary } = req.body;
+        await players.updatePlayerSalary(player_id, year, team_id, salary);
+        res.redirect(`/player/details?playerId=${player_id}`);
+    }));
+
+router.route('/salary/delete')
+    //TODO: Fix
+    .post(catchAsync(async (req, res) => {
+        const { player_id, year } = req.body;
+        await players.deletePlayerSalary(player_id, year);
+        res.redirect(`/player/details?playerId=${player_id}`);
+    }));
+
+router.route('/salary/insert')
+    .post(catchAsync(async (req, res) => {
+        const { player_id, year, team_id, salary } = req.body;
+        await players.insertPlayerSalary(player_id, year, team_id, salary);
+        res.redirect(`/player/details?playerId=${player_id}`);
+    }));
+
 module.exports = router;
