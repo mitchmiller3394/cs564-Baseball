@@ -57,6 +57,16 @@ module.exports.getPlayerSalary = async (id) => {
     return [rows];
 }
 
+module.exports.deletePlayerSalary = async (player_id, team_id, year) => {
+    const sql = "CALL deletePlayerSalary(?, ?, ?)";
+    await pool.promise().execute(sql, [player_id, team_id, year]);
+}
+
+module.exports.insertPlayerSalary = async (player_id, year, team_id, salary) => {
+    const sql = "CALL insertPlayerSalary(?, ?, ?, ?)";
+    await pool.promise().execute(sql, [player_id, team_id, year, salary]);
+}
+
 module.exports.createPlayer = async (req, res, next) => {
     try {
         //TODO: update this to use the player model if we want to create a player

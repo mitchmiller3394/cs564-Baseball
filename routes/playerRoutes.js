@@ -15,6 +15,11 @@ router.route('/search')
     }));
 
 router.route('/details')
+    .get(catchAsync(async (req, res) => {
+        const { playerId } = req.query;
+        const playerSalary = await players.getPlayerSalary(playerId);
+        res.render('players/salary', { salary: playerSalary });
+    }))
     .post(catchAsync(async (req, res) => {
         const { playerId, playerStat } = req.body;
         if (playerStat === 'Details') {
@@ -49,8 +54,8 @@ router.route('/salary/update')
 router.route('/salary/delete')
     //TODO: Fix
     .post(catchAsync(async (req, res) => {
-        const { player_id, year } = req.body;
-        await players.deletePlayerSalary(player_id, year);
+        const { player_id, year, team_id } = req.body;
+        await players.deletePlayerSalary(player_id, team_id, year);
         res.redirect(`/player/details?playerId=${player_id}`);
     }));
 
