@@ -44,7 +44,6 @@ router.route('/details')
     }));
 
 router.route('/salary/update')
-    //TODO: Fix this. redirect to player details page somehow. maybe with a get to same route?
     .post(catchAsync(async (req, res) => {
         const { player_id, year, team_id, salary } = req.body;
         await players.updatePlayerSalary(player_id, year, team_id, salary);
@@ -52,7 +51,6 @@ router.route('/salary/update')
     }));
 
 router.route('/salary/delete')
-    //TODO: Fix
     .post(catchAsync(async (req, res) => {
         const { player_id, year, team_id } = req.body;
         await players.deletePlayerSalary(player_id, team_id, year);
