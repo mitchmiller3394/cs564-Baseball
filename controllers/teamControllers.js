@@ -1,3 +1,18 @@
+module.exports.getTopStadiumsWithTeams = async (req, res) => {
+    const { numStadiums } = req.body;
+    try {
+        console.log('Calling GetTopStadiumsWithTeams with n =', numStadiums);
+        const [results] = await pool.promise().query(
+            'CALL GetTopStadiumsWithTeams(?)',
+            [numStadiums]
+        );
+        console.log('Stored procedure results:', results);
+        return res.render('teams/result', { results: results[0] || results });
+    } catch (err) {
+        console.error('Error in getTopStadiumsWithTeams:', err);
+        res.status(500).send('Error: ' + err.message);
+    }
+};
 const mysql = require('mysql2');
 // MySQL connection and Pool creation
 const pool = mysql.createPool({
