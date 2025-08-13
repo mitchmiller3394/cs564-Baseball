@@ -5,6 +5,6 @@ const randoms = require('../controllers/randomControllers');
 
 router.route('/')
     .get(randoms.renderEntry)
-    //.post(catchAsync(randoms.getRandomStat));
+    .post(catchAsync(randoms.getRandomStat));
 
 module.exports = router;

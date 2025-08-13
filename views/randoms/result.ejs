@@ -1,0 +1,48 @@
+<%
+// Map MySQL column names to user-friendly names
+const columnMap = {
+    playerid: null,
+    name_first: 'First Name',
+    name_last: 'Last Name',
+    team_name: 'Team',
+    former_year: 'Year',
+    wins_before: 'Wins Before',
+    wins_after: 'Wins After',
+    dropoff: 'Dropoff'
+};
+// Get the columns to display (filter out those mapped to null)
+const displayColumns = Object.keys(results[0] || {}).filter(key => columnMap[key] !== null && columnMap[key] !== undefined);
+%>
+<% layout('layouts/boilerplate') %>
+<div class="container mt-5">
+    <div class="card card-bg shadow">
+        <div class="card-body">
+            <h3 class="card-title mb-4">Compare Two Players Dropoff Results</h3>
+            <% if (results && results.length) { %>
+                <div class="table-responsive">
+                    <table class="table table-dark table-striped table-bordered align-middle">
+                        <thead>
+                            <tr>
+                                <% displayColumns.forEach(function(key) { %>
+                                    <th><%= columnMap[key] || key %></th>
+                                <% }); %>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% results.forEach(function(row) { %>
+                                <tr>
+                                    <% displayColumns.forEach(function(key) { %>
+                                        <td><%= row[key] %></td>
+                                    <% }); %>
+                                </tr>
+                            <% }); %>
+                        </tbody>
+                    </table>
+                </div>
+            <% } else { %>
+                <div class="alert alert-warning">No results available for these players.</div>
+            <% } %>
+            <a href="/random" class="btn btn-primary mt-3">Back</a>
+        </div>
+    </div>
+</div>
