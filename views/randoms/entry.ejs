@@ -16,6 +16,7 @@
                         <option value="PlayerBirthday">Players With Birthday</option>
                         <option value="compareTwoPlayerDropoff">Which Players Had A Greater Impact on Their Team</option>
                         <option value="getTopPaidPlayerByFirstName">Top Paid Player By First Name</option>
+                        <option value="getTopFirstNamesByPosition">Top First Names By Position</option>
                         <!-- Add more fun options as needed -->
                     </select>
                 </div>
@@ -87,7 +88,7 @@ statSelect.addEventListener('change', function() {
                 </div>
             `;
             break;
-    case 'compareTwoPlayerDropoff':
+        case 'compareTwoPlayerDropoff':
             dynamicInputs.innerHTML = `
                 <div class="mb-2">
                     <label class="form-label mb-1" for="player1_first">Player 1 First Name</label>
@@ -106,6 +107,27 @@ statSelect.addEventListener('change', function() {
                     <input class="form-control" type="text" id="player2_last" name="player2_last" required>
                 </div>
             `;
+            break;
+        case 'getTopFirstNamesByPosition':
+            dynamicInputs.innerHTML = `
+                <div class="mb-2">
+                    <label class="form-label mb-1" for="position">Position</label>
+                    <select class="form-select" id="position" name="position" required>
+                        <option value="" disabled selected>Select Position</option>
+                        <option value="P">Pitcher</option>
+                        <option value="C">Catcher</option>
+                        <option value="1B">First Base</option>
+                        <option value="2B">Second Base</option>
+                        <option value="3B">Third Base</option>
+                        <option value="SS">Shortstop</option>
+                        <option value="LF">Left Field</option>
+                        <option value="CF">Center Field</option>
+                        <option value="RF">Right Field</option>
+                        <option value="DH">Designated Hitter</option>
+                    </select>
+                </div>
+            `;
+            break;
         default:
             break;
     }

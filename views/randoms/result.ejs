@@ -9,7 +9,8 @@ const columnMap = {
     wins_before: 'Wins Before',
     wins_after: 'Wins After',
     dropoff: 'Dropoff',
-    total_salary: 'Total Salary'
+    total_salary: 'Total Salary',
+    player_count: 'Number of Players'
 };
 // Get the columns to display (filter out those mapped to null)
 const displayColumns = Object.keys(results[0] || {}).filter(key => columnMap[key] !== null && columnMap[key] !== undefined);
