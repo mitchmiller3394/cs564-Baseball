@@ -6,7 +6,7 @@ module.exports.insertTeamWins = async (req, res) => {
             'CALL insertTeamWins(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
             [p_team_id, p_year, p_g, p_wins, p_losses, p_div_win, p_wc_win, p_lg_win, p_ws_win, p_name, p_attendance]
         );
-        res.render('teams/result', { results: [], message: 'Team wins inserted successfully!' });
+        res.render('teams/result', { results: [], message: 'Team wins inserted successfully!', viewType: 'insertTeamWins' });
     } catch (err) {
         console.error('Error in insertTeamWins:', err);
         res.status(500).send('Error: ' + err.message);
