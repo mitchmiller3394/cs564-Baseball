@@ -1,3 +1,17 @@
+module.exports.insertTeamWins = async (req, res) => {
+    const { p_team_id, p_year, p_g, p_wins, p_losses, p_div_win, p_wc_win, p_lg_win, p_ws_win, p_name, p_attendance } = req.body;
+    try {
+        console.log('Calling insertTeamWins with:', req.body);
+        await pool.promise().query(
+            'CALL insertTeamWins(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+            [p_team_id, p_year, p_g, p_wins, p_losses, p_div_win, p_wc_win, p_lg_win, p_ws_win, p_name, p_attendance]
+        );
+        res.render('teams/result', { results: [], message: 'Team wins inserted successfully!' });
+    } catch (err) {
+        console.error('Error in insertTeamWins:', err);
+        res.status(500).send('Error: ' + err.message);
+    }
+};
 module.exports.getTopStadiumsWithTeams = async (req, res) => {
     const { numStadiums } = req.body;
     try {

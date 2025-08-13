@@ -1,18 +1,102 @@
 <% layout('layouts/boilerplate') %>
 
 <div class="container min-vh-100 d-flex justify-content-center align-items-center">
-    <div class="card shadow card-bg w-100" style="max-width: 500px;">
+    <div class="card shadow card-bg w-100" style="max-width: 600px;">
         <div class="card-body card-bg">
-            <h5 class="card-title text-center mb-3">Top Stadiums by Number of Teams Hosted</h5>
-            <form action="/team/top-stadiums" method="POST" class="needs-validation" novalidate>
+            <h5 class="card-title text-center mb-3">Team Options</h5>
+            <form id="teamForm" action="/team/top-stadiums" method="POST" class="needs-validation" novalidate>
                 <div class="mb-3">
-                    <label class="form-label mb-1" for="numStadiums">Number of Stadiums to Show</label>
-                    <input class="form-control" type="number" id="numStadiums" name="numStadiums" min="1" required>
+                    <label class="form-label mb-1" for="teamAction">Choose an Option</label>
+                    <select class="form-select" id="teamAction" name="teamAction" required>
+                        <option value="" disabled selected>Select Option</option>
+                        <option value="topStadiums">Top Stadiums by Number of Teams Hosted</option>
+                        <option value="insertTeamWins">Insert Team Wins</option>
+                    </select>
                 </div>
+                <div id="dynamicTeamInputs"></div>
                 <div class="d-grid mt-3">
-                    <button class="btn btn-success">Show Me!</button>
+                    <button class="btn btn-success">Submit</button>
                 </div>
             </form>
         </div>
     </div>
 </div>
+
+<script>
+const dynamicTeamInputs = document.getElementById('dynamicTeamInputs');
+const teamAction = document.getElementById('teamAction');
+const teamForm = document.getElementById('teamForm');
+
+teamAction.addEventListener('change', function() {
+    dynamicTeamInputs.innerHTML = '';
+    if (this.value === 'topStadiums') {
+        teamForm.action = '/team/top-stadiums';
+        dynamicTeamInputs.innerHTML = `
+            <div class="mb-3">
+                <label class="form-label mb-1" for="numStadiums">Number of Stadiums to Show</label>
+                <input class="form-control" type="number" id="numStadiums" name="numStadiums" min="1" required>
+            </div>
+        `;
+    } else if (this.value === 'insertTeamWins') {
+        teamForm.action = '/team/insert-team-wins';
+        dynamicTeamInputs.innerHTML = `
+            <div class="mb-2">
+                <label class="form-label mb-1" for="p_team_id">Team ID</label>
+                <input class="form-control" type="number" id="p_team_id" name="p_team_id" required>
+            </div>
+            <div class="mb-2">
+                <label class="form-label mb-1" for="p_year">Year</label>
+                <input class="form-control" type="number" id="p_year" name="p_year" required>
+            </div>
+            <div class="mb-2">
+                <label class="form-label mb-1" for="p_g">Games Played</label>
+                <input class="form-control" type="number" id="p_g" name="p_g" required>
+            </div>
+            <div class="mb-2">
+                <label class="form-label mb-1" for="p_wins">Wins</label>
+                <input class="form-control" type="number" id="p_wins" name="p_wins" required>
+            </div>
+            <div class="mb-2">
+                <label class="form-label mb-1" for="p_losses">Losses</label>
+                <input class="form-control" type="number" id="p_losses" name="p_losses" required>
+            </div>
+            <div class="mb-2">
+                <label class="form-label mb-1" for="p_div_win">Division Win?</label>
+                <select class="form-select" id="p_div_win" name="p_div_win" required>
+                    <option value="1">Yes</option>
+                    <option value="0">No</option>
+                </select>
+            </div>
+            <div class="mb-2">
+                <label class="form-label mb-1" for="p_wc_win">Wildcard Win?</label>
+                <select class="form-select" id="p_wc_win" name="p_wc_win" required>
+                    <option value="1">Yes</option>
+                    <option value="0">No</option>
+                </select>
+            </div>
+            <div class="mb-2">
+                <label class="form-label mb-1" for="p_lg_win">League Win?</label>
+                <select class="form-select" id="p_lg_win" name="p_lg_win" required>
+                    <option value="1">Yes</option>
+                    <option value="0">No</option>
+                </select>
+            </div>
+            <div class="mb-2">
+                <label class="form-label mb-1" for="p_ws_win">World Series Win?</label>
+                <select class="form-select" id="p_ws_win" name="p_ws_win" required>
+                    <option value="1">Yes</option>
+                    <option value="0">No</option>
+                </select>
+            </div>
+            <div class="mb-2">
+                <label class="form-label mb-1" for="p_name">Team Name</label>
+                <input class="form-control" type="text" id="p_name" name="p_name" required>
+            </div>
+            <div class="mb-2">
+                <label class="form-label mb-1" for="p_attendance">Attendance</label>
+                <input class="form-control" type="number" id="p_attendance" name="p_attendance" required>
+            </div>
+        `;
+    }
+});
+</script>
