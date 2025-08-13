@@ -1,0 +1,41 @@
+<% layout('layouts/boilerplate') %>
+<div class="container mt-5">
+    <div class="card card-bg shadow">
+        <div class="card-body">
+            <h3 class="card-title mb-4">Dollars Per Home Run and Strikeouts for a Player</h3>
+            <% 
+                // Flatten arrays if needed (MySQL stored procedures often return [ [rows], ... ])
+                const hrRows = dollarPerHr && dollarPerHr.length && dollarPerHr[0].length ? dollarPerHr[0][0] : [];
+                const kRows = dollarPerK && dollarPerK.length && dollarPerK[0].length ? dollarPerK[0][0] : [];
+            %>
+            <% if (hrRows.length) { %>
+                <div class="table-responsive">
+                    <table class="table table-dark table-striped table-bordered align-middle">
+                        <thead>
+                            <tr>
+                                <th>Year</th>
+                                <th>Dollars Per Home Run Hit</th>
+                                <th>Dollars Per K</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% hrRows.forEach(hrRow => { 
+                                // Find matching K row by year
+                                const kRow = kRows.find(k => k.year === hrRow.year);
+                            %>
+                                <tr>
+                                    <td><%= hrRow.year %></td>
+                                    <td><%= hrRow.dollarsPerHR %></td>
+                                    <td><%= kRow ? kRow.dollarsPerK : 'N/A' %></td>
+                                </tr>
+                            <% }) %>
+                        </tbody>
+                    </table>
+                </div>
+            <% } else { %>
+                <div class="alert alert-warning">No batting stats available for this player.</div>
+            <% } %>
+            <a href="/player" class="btn btn-secondary mt-3">Back</a>
+        </div>
+    </div>
+</div>

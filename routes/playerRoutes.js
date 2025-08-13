@@ -37,6 +37,10 @@ router.route('/details')
         } else if (playerStat === 'Pitching') {
             const playerPitching = await players.getPlayerPitching(playerId);
             res.render('players/pitching', { pitching: playerPitching });
+        } else if (playerStat === 'DollarPerStat') {
+            const playerDollarPerHr = await players.getPlayerDollarPerHr(playerId);
+            const playerDollarPerK = await players.getPlayerDollarPerK(playerId);
+            res.render('players/dollarPerStat', { dollarPerHr: playerDollarPerHr, dollarPerK: playerDollarPerK });
         } else {
             req.flash('error', 'Invalid stat selected');
             res.redirect('/player');
