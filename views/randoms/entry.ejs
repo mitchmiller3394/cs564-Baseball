@@ -14,6 +14,7 @@
                         <option value="BestBattingAverage">Best Batting Average</option>
                         <option value="TeamMostWins">Team With Most Wins</option>
                         <option value="PlayerBirthday">Players With Birthday</option>
+                        <option value="compareTwoPlayerDropoff">Which Players Had A Greater Impact on Their Team</option>
                         <!-- Add more fun options as needed -->
                     </select>
                 </div>
@@ -77,6 +78,25 @@ statSelect.addEventListener('change', function() {
                 </div>
             `;
             break;
+        case 'compareTwoPlayerDropoff':
+            dynamicInputs.innerHTML = `
+                <div class="mb-2">
+                    <label class="form-label mb-1" for="player1_first">Player 1 First Name</label>
+                    <input class="form-control" type="text" id="player1_first" name="player1_first" required>
+                </div>
+                <div class="mb-2">
+                    <label class="form-label mb-1" for="player1_last">Player 1 Last Name</label>
+                    <input class="form-control" type="text" id="player1_last" name="player1_last" required>
+                </div>
+                <div class="mb-2">
+                    <label class="form-label mb-1" for="player2_first">Player 2 First Name</label>
+                    <input class="form-control" type="text" id="player2_first" name="player2_first" required>
+                </div>
+                <div class="mb-2">
+                    <label class="form-label mb-1" for="player2_last">Player 2 Last Name</label>
+                    <input class="form-control" type="text" id="player2_last" name="player2_last" required>
+                </div>
+            `;
         default:
             break;
     }

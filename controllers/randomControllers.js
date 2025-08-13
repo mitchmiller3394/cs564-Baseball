@@ -10,3 +10,13 @@ const pool = mysql.createPool({
 module.exports.renderEntry = (req, res) => {
     res.render('randoms/entry');
 }
+
+module.exports.getRandomStat = async (req, res) => {
+    const { randomStat, player1_first, player1_last, player2_first, player2_last } = req.body;
+    if (randomStat === 'compareTwoPlayerDropoff') {
+        const [results] = await pool.promise().query(
+            'CALL compareTwoPlayerDropoff(?, ?, ?, ?)',
+            [player1_first, player1_last, player2_first, player2_last]);
+        return res.render('randoms/result', { results });
+    }
+};
