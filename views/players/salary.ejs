@@ -15,20 +15,36 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <% salary[0].forEach(row => { %>
-                                <tr>
-                                    <td><%= row.year %></td>
-                                    <td><%= row.team_id %></td>
-                                    <td><%= row.salary %></td>
-                                    <td>
-                                        <form action="/player/salary/update" method="POST" class="d-inline">
+                            <% salary[0].forEach((row, idx) => { %>
+                                <tr id="row-<%= idx %>">
+                                    <form action="/player/salary/update" method="POST" class="salary-edit-form">
+                                        <td>
+                                            <span class="salary-view"><%= row.year %></span>
+                                            <input type="number" name="year" class="form-control form-control-sm salary-edit d-none" value="<%= row.year %>" min="1800" max="2025" required>
+                                        </td>
+                                        <td>
+                                            <span class="salary-view"><%= row.team_id %></span>
+                                            <input type="text" name="team_id" class="form-control form-control-sm salary-edit d-none" value="<%= row.team_id %>" required>
+                                        </td>
+                                        <td>
+                                            <span class="salary-view"><%= row.salary %></span>
+                                            <input type="number" name="salary" class="form-control form-control-sm salary-edit d-none" value="<%= row.salary %>" min="0" required>
+                                        </td>
+                                        <td>
                                             <input type="hidden" name="player_id" value="<%= row.player_id %>">
-                                            <input type="hidden" name="year" value="<%= row.year %>">
-                                            <input type="hidden" name="team_id" value="<%= row.team_id %>">
-                                            <button type="submit" class="btn btn-sm btn-outline-primary" title="Update">
+                                            <!-- "error" on the following lines for the ejs in the onclick field are fine. It works and is correct syntax -->
+                                            <button type="button" class="btn btn-sm btn-outline-primary salary-view" title="Edit" onclick="enableEdit(<%= idx %>)">
                                                 <i class="bi bi-pencil"></i>
                                             </button>
-                                        </form>
+                                            <button type="submit" class="btn btn-sm btn-success salary-edit d-none" title="Save">
+                                                <i class="bi bi-check-lg"></i>
+                                            </button>
+                                            <button type="button" class="btn btn-sm btn-secondary salary-edit d-none" title="Cancel" onclick="cancelEdit(<%= idx %>)">
+                                                <i class="bi bi-x-lg"></i>
+                                            </button>
+                                        </td>
+                                    </form>
+                                    <td>
                                         <form action="/player/salary/delete" method="POST" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this salary entry?');">
                                             <input type="hidden" name="player_id" value="<%= row.player_id %>">
                                             <input type="hidden" name="year" value="<%= row.year %>">
@@ -71,5 +87,17 @@
     </div>
 </div>
 
+<script>
+function enableEdit(idx) {
+    const row = document.getElementById(`row-${idx}`);
+    row.querySelectorAll('.salary-view').forEach(el => el.classList.add('d-none'));
+    row.querySelectorAll('.salary-edit').forEach(el => el.classList.remove('d-none'));
+}
+function cancelEdit(idx) {
+    const row = document.getElementById(`row-${idx}`);
+    row.querySelectorAll('.salary-edit').forEach(el => el.classList.add('d-none'));
+    row.querySelectorAll('.salary-view').forEach(el => el.classList.remove('d-none'));
+}
+</script>
 <!-- Bootstrap Icons CDN if not already included -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
