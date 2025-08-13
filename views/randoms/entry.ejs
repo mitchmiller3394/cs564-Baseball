@@ -15,6 +15,7 @@
                         <option value="TeamMostWins">Team With Most Wins</option>
                         <option value="PlayerBirthday">Players With Birthday</option>
                         <option value="compareTwoPlayerDropoff">Which Players Had A Greater Impact on Their Team</option>
+                        <option value="getTopPaidPlayerByFirstName">Top Paid Player By First Name</option>
                         <!-- Add more fun options as needed -->
                     </select>
                 </div>
@@ -34,6 +35,14 @@ const statSelect = document.getElementById('randomStat');
 statSelect.addEventListener('change', function() {
     dynamicInputs.innerHTML = '';
     switch (this.value) {
+        case 'getTopPaidPlayerByFirstName':
+            dynamicInputs.innerHTML = `
+                <div class="mb-2">
+                    <label class="form-label mb-1" for="first_name">First Name</label>
+                    <input class="form-control" type="text" id="first_name" name="first_name" required>
+                </div>
+            `;
+            break;
         case 'LongestHomeRun':
             // No extra input needed
             break;

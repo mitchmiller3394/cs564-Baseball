@@ -12,14 +12,22 @@ module.exports.renderEntry = (req, res) => {
 }
 
 module.exports.getRandomStat = async (req, res) => {
-    const { randomStat, player1_first, player1_last, player2_first, player2_last } = req.body;
+    const { randomStat, player1_first, player1_last, player2_first, player2_last, first_name } = req.body;
     try {
         console.log('Received POST:', req.body);
         if (randomStat === 'compareTwoPlayerDropoff') {
-            console.log('Calling stored procedure...');
+            console.log('Calling stored procedure CompareTwoPlayersDropoff...');
             const [results] = await pool.promise().query(
                 'CALL CompareTwoPlayersDropoff(?, ?, ?, ?)',
                 [player1_first, player1_last, player2_first, player2_last]
+            );
+            console.log('Stored procedure results:', results);
+            return res.render('randoms/result', { results: results[0] || results });
+        } else if (randomStat === 'getTopPaidPlayerByFirstName') {
+            console.log('Calling stored procedure GetTopPaidPlayerByFirstName...');
+            const [results] = await pool.promise().query(
+                'CALL GetTopPaidPlayerByFirstName(?)',
+                [first_name]
             );
             console.log('Stored procedure results:', results);
             return res.render('randoms/result', { results: results[0] || results });
