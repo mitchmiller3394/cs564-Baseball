@@ -19,4 +19,11 @@ router.route('/total-team-salary')
             res.render('teams/Salary', { salary: teamSalary });
         }));
 
+router.route('/dollars-per-win')
+    .post(catchAsync(async (req, res) => {
+            const { team_id } = req.body;
+            const dollarsPerWin = await teams.getDollarsPerWin(team_id);
+            res.render('teams/DollarsPerWin', { dollarsPerWin });
+        }));
+
 module.exports = router;

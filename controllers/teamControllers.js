@@ -45,3 +45,9 @@ module.exports.getTotalTeamSalary = async (team_id) => {
     const [rows] = await pool.promise().execute(sql, [team_id]);
     return [rows];
 }
+
+module.exports.getDollarsPerWin = async (team_id) => {
+    const sql = 'CALL searchTeamDollarsPerWin(?)';
+    const [rows] = await pool.promise().execute(sql, [team_id]);
+    return [rows];
+}

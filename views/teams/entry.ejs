@@ -12,6 +12,7 @@
                         <option value="topStadiums">Top Stadiums by Number of Teams Hosted</option>
                         <option value="insertTeamWins">Insert Team Wins</option>
                         <option value="totalTeamSalary">Total Team Salary</option>
+                        <option value="dollarsPerWin">Team Dollars Spent Per Win</option>
                     </select>
                 </div>
                 <div id="dynamicTeamInputs"></div>
@@ -100,6 +101,14 @@ teamAction.addEventListener('change', function() {
         `;
     } else if (this.value === 'totalTeamSalary') {
         teamForm.action = '/team/total-team-salary';
+        dynamicTeamInputs.innerHTML = `
+            <div class="mb-2">
+                <label class="form-label mb-1" for="team_id">Team ID</label>
+                <input class="form-control" type="text" id="team_id" name="team_id" required>
+            </div>
+        `;
+    } else if (this.value === 'dollarsPerWin') {
+        teamForm.action = '/team/dollars-per-win';
         dynamicTeamInputs.innerHTML = `
             <div class="mb-2">
                 <label class="form-label mb-1" for="team_id">Team ID</label>
