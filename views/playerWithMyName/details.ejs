@@ -1,0 +1,15 @@
+<% layout('layouts/boilerplate') %>
+<div class="container mt-5">
+    <div class="card card-bg shadow">
+        <div class="card-body">
+            <h3 class="card-title">Stats for Players Named "Bob"</h3>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item bg-transparent text-white">Era: <%= player.avg_era %></li>
+                <li class="list-group-item bg-transparent text-white">Wins: <%= player.avg_wins %></li>
+                <li class="list-group-item bg-transparent text-white">Errors: <%= player.average_errors %></li>
+                <li class="list-group-item bg-transparent text-white">Batting Average: <%= player.avg_ba %></li>
+            </ul>
+            <a href="/myName" class="btn btn-secondary mt-3">Back</a>
+        </div>
+    </div>
+</div>
