@@ -9,11 +9,6 @@
                     <label class="form-label mb-1" for="randomStat">Choose a Random Stat</label>
                     <select class="form-select" id="randomStat" name="randomStat" required>
                         <option value="" disabled selected>Select Stat Type</option>
-                        <option value="LongestHomeRun">Longest Home Run</option>
-                        <option value="MostStolenBases">Most Stolen Bases</option>
-                        <option value="BestBattingAverage">Best Batting Average</option>
-                        <option value="TeamMostWins">Team With Most Wins</option>
-                        <option value="PlayerBirthday">Players With Birthday</option>
                         <option value="compareTwoPlayerDropoff">Which Players Had A Greater Impact on Their Team</option>
                         <option value="getTopPaidPlayerByFirstName">Top Paid Player By First Name</option>
                         <option value="getTopFirstNamesByPosition">Top First Names By Position</option>
@@ -41,50 +36,6 @@ statSelect.addEventListener('change', function() {
                 <div class="mb-2">
                     <label class="form-label mb-1" for="first_name">First Name</label>
                     <input class="form-control" type="text" id="first_name" name="first_name" required>
-                </div>
-            `;
-            break;
-        case 'LongestHomeRun':
-            // No extra input needed
-            break;
-        case 'MostStolenBases':
-            dynamicInputs.innerHTML = `
-                <div class="mb-2">
-                    <label class="form-label mb-1" for="year">Year</label>
-                    <input class="form-control" type="number" id="year" name="year" min="1900" max="2025" required>
-                </div>
-            `;
-            break;
-        case 'BestBattingAverage':
-            dynamicInputs.innerHTML = `
-                <div class="mb-2">
-                    <label class="form-label mb-1" for="minAtBats">Minimum At Bats</label>
-                    <input class="form-control" type="number" id="minAtBats" name="minAtBats" min="1" required>
-                </div>
-            `;
-            break;
-        case 'TeamMostWins':
-            dynamicInputs.innerHTML = `
-                <div class="mb-2">
-                    <label class="form-label mb-1" for="season">Season</label>
-                    <input class="form-control" type="number" id="season" name="season" min="1900" max="2025" required>
-                </div>
-            `;
-            break;
-        case 'PlayerBirthday':
-            dynamicInputs.innerHTML = `
-                <div class="mb-2">
-                    <label class="form-label mb-1" for="month">Month</label>
-                    <select class="form-select" id="month" name="month" required>
-                        <option value="" disabled selected>Select Month</option>
-                        <% for(let m=1; m<=12; m++) { %>
-                            <option value="<%= m %>"><%= new Date(0, m-1).toLocaleString('default', { month: 'long' }) %></option>
-                        <% } %>
-                    </select>
-                </div>
-                <div class="mb-2">
-                    <label class="form-label mb-1" for="day">Day</label>
-                    <input class="form-control" type="number" id="day" name="day" min="1" max="31" required>
                 </div>
             `;
             break;
