@@ -22,7 +22,7 @@ module.exports.getRandomStat = async (req, res) => {
                 [player1_first, player1_last, player2_first, player2_last]
             );
             console.log('Stored procedure results:', results);
-            return res.render('randoms/result', { results: results[0] || results });
+            return res.render('randoms/result', { results: results[0] || results, title: 'Compare Two Players Dropoff Results' });
         } else if (randomStat === 'getTopPaidPlayerByFirstName') {
             console.log('Calling stored procedure GetTopPaidPlayerByFirstName...');
             const [results] = await pool.promise().query(
@@ -30,7 +30,7 @@ module.exports.getRandomStat = async (req, res) => {
                 [first_name]
             );
             console.log('Stored procedure results:', results);
-            return res.render('randoms/result', { results: results[0] || results });
+            return res.render('randoms/result', { results: results[0] || results, title: 'Top Paid Player By First Name' });
         } else if (randomStat === 'getTopFirstNamesByPosition') {
             console.log('Calling stored procedure GetTopFirstNamesByPosition...');
             const [results] = await pool.promise().query(
@@ -38,7 +38,7 @@ module.exports.getRandomStat = async (req, res) => {
                 [position]
             );
             console.log('Stored procedure results:', results);
-            return res.render('randoms/result', { results: results[0] || results });
+            return res.render('randoms/result', { results: results[0] || results, title: 'Top First Names By Position' });
         }
         res.send('No matching stat type.');
     } catch (err) {
