@@ -39,3 +39,9 @@ const pool = mysql.createPool({
 module.exports.renderEntry = (req, res) => {
     res.render('teams/entry');
 }
+
+module.exports.getTotalTeamSalary = async (team_id) => {
+    const sql = 'CALL searchTeamTotalSalary(?)';
+    const [rows] = await pool.promise().execute(sql, [team_id]);
+    return [rows];
+}

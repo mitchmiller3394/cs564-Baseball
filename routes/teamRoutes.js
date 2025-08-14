@@ -12,4 +12,11 @@ router.route('/')
 
 router.post('/top-stadiums', catchAsync(teams.getTopStadiumsWithTeams));
 
+router.route('/total-team-salary')
+    .post(catchAsync(async (req, res) => {
+            const { team_id } = req.body;
+            const teamSalary = await teams.getTotalTeamSalary(team_id);
+            res.render('teams/Salary', { salary: teamSalary });
+        }));
+
 module.exports = router;
