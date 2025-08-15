@@ -12,6 +12,8 @@ const randomRoutes = require('./routes/randomRoutes');
 const homeRoutes = require('./routes/homeRoutes');
 const userRoutes = require('./routes/userRoutes');
 const myNameStatsRoutes = require('./routes/myNameStatsRoutes');
+const addPlayerRoutes = require('./routes/addPlayerRoutes');
+const leagueRoutes = require('./routes/leagueRoutes');
 const passport = require('passport');
 const LocalStrategy = require('passport-local');
 const argon2 = require('argon2');
@@ -124,6 +126,10 @@ app.use('/random', randomRoutes);
 app.use('/', userRoutes);
 
 app.use('/myName',myNameStatsRoutes)
+
+app.use('/addPlayer', addPlayerRoutes);
+
+app.use('/league', leagueRoutes);
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => {

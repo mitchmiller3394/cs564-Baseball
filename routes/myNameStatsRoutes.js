@@ -11,6 +11,9 @@ router.route('/details')
     const { playerName } = req.body;    
     const playerDetails = await statsForName.searchStatsForName(playerName);
     
-    res.render('playerWithMyName/details',{player: playerDetails});
+    res.render('playerWithMyName/details',{
+        player: playerDetails,
+        searchedName: playerName
+    });
 }));
 module.exports = router;

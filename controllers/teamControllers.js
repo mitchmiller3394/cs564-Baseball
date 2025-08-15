@@ -1,3 +1,13 @@
+const mysql = require('mysql2');
+
+// MySQL connection and Pool creation
+const pool = mysql.createPool({
+    host: 'localhost',
+    user: 'root',
+    password: process.env.MYSQL_PASSWORD,
+    database: 'cs564',
+});
+
 module.exports.insertTeamWins = async (req, res) => {
     const { p_team_id, p_year, p_g, p_wins, p_losses, p_div_win, p_wc_win, p_lg_win, p_ws_win, p_name, p_attendance } = req.body;
     try {
@@ -12,6 +22,7 @@ module.exports.insertTeamWins = async (req, res) => {
         res.status(500).send('Error: ' + err.message);
     }
 };
+
 module.exports.getTopStadiumsWithTeams = async (req, res) => {
     const { numStadiums } = req.body;
     try {
@@ -27,14 +38,6 @@ module.exports.getTopStadiumsWithTeams = async (req, res) => {
         res.status(500).send('Error: ' + err.message);
     }
 };
-const mysql = require('mysql2');
-// MySQL connection and Pool creation
-const pool = mysql.createPool({
-    host: 'localhost',
-    user: 'root',
-    password: process.env.MYSQL_PASSWORD,
-    database: 'cs564',
-});
 
 module.exports.renderEntry = (req, res) => {
     res.render('teams/entry');
@@ -50,4 +53,28 @@ module.exports.getDollarsPerWin = async (team_id) => {
     const sql = 'CALL searchTeamDollarsPerWin(?)';
     const [rows] = await pool.promise().execute(sql, [team_id]);
     return [rows];
+}
+
+module.exports.getPlayersOnTeam = async (teamName, year) => {
+    try {
+        console.log('=== getPlayersOnTeam Debug ===');
+        console.log('Input teamName:', teamName);
+        console.log('Input year:', year);
+        
+        const [rows] = await pool.promise().execute('CALL getPlayersForTeam(?, ?)', [teamName, year]);
+        console.log('Raw database response:', JSON.stringify(rows, null, 2));
+        console.log('rows[0]:', rows[0]);
+        console.log('Type of rows[0]:', typeof rows[0]);
+        console.log('Is rows[0] array?', Array.isArray(rows[0]));
+        
+        const result = rows[0] || [];
+        console.log('Final result to return:', result);
+        console.log('Result length:', result.length);
+        console.log('==============================');
+        
+        return result;
+    } catch (error) {
+        console.error('Error in getPlayersOnTeam:', error);
+        throw error;
+    }
 }

@@ -1,0 +1,76 @@
+<% layout('layouts/boilerplate') %>
+<div class="container mt-5">
+    <div class="card card-bg shadow">
+        <div class="card-body">
+            <h3 class="card-title mb-4">League Statistics - <%= leagueId %></h3>
+            
+            <% if (stats) { %>
+                <div class="row">
+                    <div class="col-md-4 mb-3">
+                        <div class="card bg-primary text-white">
+                            <div class="card-body text-center">
+                                <h5 class="card-title">Average ERA</h5>
+                                <h2 class="card-text"><%= stats.era ? stats.era.toFixed(3) : 'N/A' %></h2>
+                                <small>Earned Run Average</small>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-4 mb-3">
+                        <div class="card bg-success text-white">
+                            <div class="card-body text-center">
+                                <h5 class="card-title">Average Batting</h5>
+                                <h2 class="card-text"><%= stats.bp ? stats.bp.toFixed(3) : 'N/A' %></h2>
+                                <small>Batting Percentage</small>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-4 mb-3">
+                        <div class="card bg-warning text-white">
+                            <div class="card-body text-center">
+                                <h5 class="card-title">Average Errors</h5>
+                                <h2 class="card-text"><%= stats.err ? stats.err.toFixed(2) : 'N/A' %></h2>
+                                <small>Fielding Errors</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Detailed table view -->
+                <div class="table-responsive mt-4">
+                    <table class="table table-dark table-striped table-bordered align-middle">
+                        <thead>
+                            <tr>
+                                <th>Statistic</th>
+                                <th>Value</th>
+                                <th>Description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>ERA</strong></td>
+                                <td><%= stats.era ? stats.era.toFixed(3) : 'N/A' %></td>
+                                <td>Average Earned Run Average for all pitchers in the league</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Batting Percentage</strong></td>
+                                <td><%= stats.bp ? stats.bp.toFixed(3) : 'N/A' %></td>
+                                <td>Average batting percentage (hits/at-bats) for all batters in the league</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Fielding Errors</strong></td>
+                                <td><%= stats.err ? stats.err.toFixed(2) : 'N/A' %></td>
+                                <td>Average number of fielding errors per player in the league</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            <% } else { %>
+                <div class="alert alert-warning">No statistics available for this league.</div>
+            <% } %>
+            
+            <a href="/league" class="btn btn-primary mt-3">Back</a>
+        </div>
+    </div>
+</div>

@@ -26,4 +26,15 @@ router.route('/dollars-per-win')
             res.render('teams/DollarsPerWin', { dollarsPerWin });
         }));
 
+router.route('/players-on-team')
+    .post(catchAsync(async (req, res) => {
+            const { teamName, year } = req.body;
+            const players = await teams.getPlayersOnTeam(teamName, year);
+            res.render('teams/result', { 
+                results: players, 
+                message: `Players on ${teamName} for ${year}`,
+                viewType: 'playersOnTeam'
+            });
+        }));
+
 module.exports = router;

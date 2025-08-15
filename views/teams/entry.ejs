@@ -13,6 +13,7 @@
                         <option value="insertTeamWins">Insert Team Wins</option>
                         <option value="totalTeamSalary">Total Team Salary</option>
                         <option value="dollarsPerWin">Team Dollars Spent Per Win</option>
+                        <option value="playersOnTeam">Players on Team for Year</option>
                     </select>
                 </div>
                 <div id="dynamicTeamInputs"></div>
@@ -115,6 +116,76 @@ teamAction.addEventListener('change', function() {
                 <input class="form-control" type="text" id="team_id" name="team_id" required>
             </div>
         `;
+    } else if (this.value === 'playersOnTeam') {
+        teamForm.action = '/team/players-on-team';
+        dynamicTeamInputs.innerHTML = `
+            <div class="mb-3">
+                <label class="form-label mb-1" for="teamName">Team Name</label>
+                <div class="position-relative">
+                    <input class="form-control" type="text" id="teamName" name="teamName" autocomplete="off" placeholder="Enter team name" required>
+                    <input type="hidden" name="teamId" id="teamId">
+                    <div id="teamSuggestions" class="dropdown-menu w-100" style="max-height: 200px; overflow-y: auto;"></div>
+                </div>
+            </div>
+            <div class="mb-3">
+                <label class="form-label mb-1" for="year">Year</label>
+                <input class="form-control" type="number" id="year" name="year" min="1871" max="2023" required>
+            </div>
+        `;
+        
+        // Add team autocomplete functionality
+        setTimeout(() => {
+            const teamNameInput = document.getElementById('teamName');
+            const teamSuggestionsDiv = document.getElementById('teamSuggestions');
+            let teamDebounceTimeout;
+            
+            teamNameInput.addEventListener('input', async function() {
+                clearTimeout(teamDebounceTimeout);
+                const query = this.value;
+                teamSuggestionsDiv.innerHTML = '';
+                
+                if (query.length < 2) {
+                    teamSuggestionsDiv.classList.remove('show');
+                    return;
+                }
+                
+                teamDebounceTimeout = setTimeout(async () => {
+                    try {
+                        const res = await fetch(`/addPlayer/search/teams?q=${encodeURIComponent(query)}`);
+                        const teams = await res.json();
+                        teamSuggestionsDiv.innerHTML = '';
+                        
+                        if (teams.length > 0) {
+                            teamSuggestionsDiv.classList.add('dropdown-menu', 'show');
+                            teams.forEach(team => {
+                                const option = document.createElement('button');
+                                option.type = 'button';
+                                option.className = 'dropdown-item';
+                                option.textContent = team.name;
+                                option.onclick = () => {
+                                    document.getElementById('teamName').value = team.name;
+                                    document.getElementById('teamId').value = team.team_id;
+                                    teamSuggestionsDiv.innerHTML = '';
+                                    teamSuggestionsDiv.classList.remove('show');
+                                };
+                                teamSuggestionsDiv.appendChild(option);
+                            });
+                        } else {
+                            teamSuggestionsDiv.classList.remove('show');
+                        }
+                    } catch (error) {
+                        console.error('Error fetching teams:', error);
+                    }
+                }, 300);
+            });
+            
+            // Hide suggestions when clicking outside
+            document.addEventListener('click', function(e) {
+                if (!e.target.closest('.position-relative')) {
+                    teamSuggestionsDiv.classList.remove('show');
+                }
+            });
+        }, 100);
     }
 });
 </script>

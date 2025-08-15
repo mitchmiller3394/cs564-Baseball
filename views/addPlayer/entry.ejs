@@ -1,0 +1,173 @@
+<% layout('layouts/boilerplate') %>
+
+<div class="container min-vh-100 d-flex justify-content-center align-items-center">
+    <div class="card shadow card-bg w-100" style="max-width: 500px;">
+        <div class="card-body card-bg">
+            <h5 class="card-title text-center">Add Player to Team</h5>
+            <form action="/addPlayer" method="POST" class="needs-validation" novalidate>
+                
+                <!-- Player Selection -->
+                <div class="mb-3">
+                    <label class="form-label mb-1" for="playerName">Player Name</label>
+                    <div class="position-relative">
+                        <input class="form-control" type="text" id="playerName" name="playerName" autocomplete="off" required>
+                        <input type="hidden" name="playerId" id="playerId">
+                        <div id="playerSuggestions" class="dropdown-menu w-100" style="max-height: 200px; overflow-y: auto;"></div>
+                    </div>
+                    <div class="invalid-feedback">Please select a player.</div>
+                </div>
+
+                <!-- Team Selection -->
+                <div class="mb-3">
+                    <label class="form-label mb-1" for="teamName">Team Name</label>
+                    <div class="position-relative">
+                        <input class="form-control" type="text" id="teamName" name="teamName" autocomplete="off" required>
+                        <input type="hidden" name="teamId" id="teamId">
+                        <div id="teamSuggestions" class="dropdown-menu w-100" style="max-height: 200px; overflow-y: auto;"></div>
+                    </div>
+                    <div class="invalid-feedback">Please select a team.</div>
+                </div>
+
+                <!-- Year Selection -->
+                <div class="mb-3">
+                    <label class="form-label mb-1" for="year">Year</label>
+                    <input class="form-control" type="number" id="year" name="year" min="1871" max="2023" required>
+                    <div class="invalid-feedback">Please enter a valid year (1871-2023).</div>
+                </div>
+
+                <div class="d-grid">
+                    <button class="btn btn-success" type="submit">Add Player to Team</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    let playerDebounceTimeout;
+    let teamDebounceTimeout;
+
+    // Player autocomplete
+    document.getElementById('playerName').addEventListener('input', async function() {
+        clearTimeout(playerDebounceTimeout);
+        const query = this.value;
+        const suggestionsDiv = document.getElementById('playerSuggestions');
+        suggestionsDiv.innerHTML = '';
+        
+        if (query.length < 2) {
+            suggestionsDiv.classList.remove('show');
+            return;
+        }
+        
+        playerDebounceTimeout = setTimeout(async () => {
+            try {
+                const res = await fetch(`/addPlayer/search/players?q=${encodeURIComponent(query)}`);
+                const players = await res.json();
+                suggestionsDiv.innerHTML = '';
+                
+                if (players.length > 0) {
+                    suggestionsDiv.classList.add('dropdown-menu', 'show');
+                    players.forEach(player => {
+                        const option = document.createElement('button');
+                        option.type = 'button';
+                        option.className = 'dropdown-item';
+                        option.textContent = `${player.name_first} ${player.name_last}`;
+                        option.onclick = () => {
+                            document.getElementById('playerName').value = `${player.name_first} ${player.name_last}`;
+                            document.getElementById('playerId').value = player.player_id;
+                            suggestionsDiv.innerHTML = '';
+                            suggestionsDiv.classList.remove('show');
+                        };
+                        suggestionsDiv.appendChild(option);
+                    });
+                } else {
+                    suggestionsDiv.classList.remove('show');
+                }
+            } catch (error) {
+                console.error('Error fetching players:', error);
+            }
+        }, 300);
+    });
+
+    // Team autocomplete
+    document.getElementById('teamName').addEventListener('input', async function() {
+        clearTimeout(teamDebounceTimeout);
+        const query = this.value;
+        const suggestionsDiv = document.getElementById('teamSuggestions');
+        suggestionsDiv.innerHTML = '';
+        
+        if (query.length < 2) {
+            suggestionsDiv.classList.remove('show');
+            return;
+        }
+        
+        teamDebounceTimeout = setTimeout(async () => {
+            try {
+                const res = await fetch(`/addPlayer/search/teams?q=${encodeURIComponent(query)}`);
+                const teams = await res.json();
+                suggestionsDiv.innerHTML = '';
+                
+                if (teams.length > 0) {
+                    suggestionsDiv.classList.add('dropdown-menu', 'show');
+                    teams.forEach(team => {
+                        const option = document.createElement('button');
+                        option.type = 'button';
+                        option.className = 'dropdown-item';
+                        option.textContent = team.name;
+                        option.onclick = () => {
+                            document.getElementById('teamName').value = team.name;
+                            document.getElementById('teamId').value = team.team_id;
+                            suggestionsDiv.innerHTML = '';
+                            suggestionsDiv.classList.remove('show');
+                        };
+                        suggestionsDiv.appendChild(option);
+                    });
+                } else {
+                    suggestionsDiv.classList.remove('show');
+                }
+            } catch (error) {
+                console.error('Error fetching teams:', error);
+            }
+        }, 300);
+    });
+
+    // Hide suggestions when clicking outside
+    document.addEventListener('click', function(e) {
+        if (!e.target.closest('.position-relative')) {
+            document.getElementById('playerSuggestions').classList.remove('show');
+            document.getElementById('teamSuggestions').classList.remove('show');
+        }
+    });
+
+    // Form validation
+    (function() {
+        'use strict';
+        window.addEventListener('load', function() {
+            const forms = document.getElementsByClassName('needs-validation');
+            const validation = Array.prototype.filter.call(forms, function(form) {
+                form.addEventListener('submit', function(event) {
+                    const playerId = document.getElementById('playerId').value;
+                    const teamId = document.getElementById('teamId').value;
+                    
+                    if (!playerId) {
+                        document.getElementById('playerName').setCustomValidity('Please select a player from the list');
+                    } else {
+                        document.getElementById('playerName').setCustomValidity('');
+                    }
+                    
+                    if (!teamId) {
+                        document.getElementById('teamName').setCustomValidity('Please select a team from the list');
+                    } else {
+                        document.getElementById('teamName').setCustomValidity('');
+                    }
+                    
+                    if (form.checkValidity() === false) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+                    form.classList.add('was-validated');
+                }, false);
+            });
+        }, false);
+    })();
+</script>

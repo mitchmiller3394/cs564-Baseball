@@ -1,0 +1,104 @@
+<% layout('layouts/boilerplate') %>
+
+<div class="container min-vh-100 d-flex justify-content-center align-items-center">
+    <div class="card shadow card-bg w-100" style="max-width: 500px;">
+        <div class="card-body card-bg">
+            <h5 class="card-title text-center">League Statistics</h5>
+            <form action="/league" method="POST" class="needs-validation" novalidate>
+                
+                <!-- League Selection -->
+                <div class="mb-3">
+                    <label class="form-label mb-1" for="leagueName">League Name</label>
+                    <div class="position-relative">
+                        <input class="form-control" type="text" id="leagueName" name="leagueName" autocomplete="off" placeholder="Enter league name" required>
+                        <input type="hidden" name="leagueId" id="leagueId">
+                        <div id="leagueSuggestions" class="dropdown-menu w-100" style="max-height: 200px; overflow-y: auto;"></div>
+                    </div>
+                    <div class="invalid-feedback">Please select a league.</div>
+                </div>
+
+                <div class="d-grid">
+                    <button class="btn btn-success" type="submit">Get League Stats</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    let leagueDebounceTimeout;
+
+    // League autocomplete
+    document.getElementById('leagueName').addEventListener('input', async function() {
+        clearTimeout(leagueDebounceTimeout);
+        const query = this.value;
+        const suggestionsDiv = document.getElementById('leagueSuggestions');
+        suggestionsDiv.innerHTML = '';
+        
+        if (query.length < 1) {
+            suggestionsDiv.classList.remove('show');
+            return;
+        }
+        
+        leagueDebounceTimeout = setTimeout(async () => {
+            try {
+                const res = await fetch(`/league/search/leagues?q=${encodeURIComponent(query)}`);
+                const leagues = await res.json();
+                suggestionsDiv.innerHTML = '';
+                
+                if (leagues.length > 0) {
+                    suggestionsDiv.classList.add('dropdown-menu', 'show');
+                    leagues.forEach(league => {
+                        const option = document.createElement('button');
+                        option.type = 'button';
+                        option.className = 'dropdown-item';
+                        option.textContent = `${league.name} (${league.league_id})`;
+                        option.onclick = () => {
+                            document.getElementById('leagueName').value = league.name;
+                            document.getElementById('leagueId').value = league.league_id;
+                            suggestionsDiv.innerHTML = '';
+                            suggestionsDiv.classList.remove('show');
+                        };
+                        suggestionsDiv.appendChild(option);
+                    });
+                } else {
+                    suggestionsDiv.classList.remove('show');
+                }
+            } catch (error) {
+                console.error('Error fetching leagues:', error);
+            }
+        }, 300);
+    });
+
+    // Hide suggestions when clicking outside
+    document.addEventListener('click', function(e) {
+        if (!e.target.closest('.position-relative')) {
+            document.getElementById('leagueSuggestions').classList.remove('show');
+        }
+    });
+
+    // Form validation
+    (function() {
+        'use strict';
+        window.addEventListener('load', function() {
+            const forms = document.getElementsByClassName('needs-validation');
+            const validation = Array.prototype.filter.call(forms, function(form) {
+                form.addEventListener('submit', function(event) {
+                    const leagueId = document.getElementById('leagueId').value;
+                    
+                    if (!leagueId) {
+                        document.getElementById('leagueName').setCustomValidity('Please select a league from the list');
+                    } else {
+                        document.getElementById('leagueName').setCustomValidity('');
+                    }
+                    
+                    if (form.checkValidity() === false) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+                    form.classList.add('was-validated');
+                }, false);
+            });
+        }, false);
+    })();
+</script>
