@@ -13,8 +13,8 @@ module.exports.renderEntry = (req, res) => {
 }
 
 module.exports.searchLeagues = async (q) => {
-    // Search for leagues by name, return league_id and name
-    const sql = "SELECT DISTINCT league_id, name FROM league WHERE name LIKE ? ORDER BY name";
+    // Search for leagues by name, return league_id and league_name
+    const sql = "SELECT league_id, league_name FROM league WHERE league_name LIKE ? ORDER BY league_name";
     const values = [`%${q}%`];
     const [rows] = await pool.promise().query(sql, values);
     return [rows];

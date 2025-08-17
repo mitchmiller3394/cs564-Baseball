@@ -52,9 +52,9 @@
                         const option = document.createElement('button');
                         option.type = 'button';
                         option.className = 'dropdown-item';
-                        option.textContent = `${league.name} (${league.league_id})`;
+                        option.textContent = `${league.league_name} (${league.league_id})`;
                         option.onclick = () => {
-                            document.getElementById('leagueName').value = league.name;
+                            document.getElementById('leagueName').value = league.league_name;
                             document.getElementById('leagueId').value = league.league_id;
                             suggestionsDiv.innerHTML = '';
                             suggestionsDiv.classList.remove('show');
